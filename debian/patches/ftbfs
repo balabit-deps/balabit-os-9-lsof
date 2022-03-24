@@ -1,0 +1,44 @@
+Description: fix ftbfs with newer glibc in sid
+ Newer versions of glibc cause a fail to build due to some linux header
+ changes. This needs to go upstream.
+Author: Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>
+Origin: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=926716
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+Index: lsof-4.93.2/tests/LTlib.c
+===================================================================
+--- lsof-4.93.2.orig/tests/LTlib.c
++++ lsof-4.93.2/tests/LTlib.c
+@@ -231,26 +231,32 @@ _PROTOTYPE(static X2DEV_T x2dev,(char *x
+  */
+ 
+ #if	!defined(major_S)
++#include <sys/sysmacros.h>
+ #define	major_S		major
+ #endif	/* defined(major_S) */
+ 
+ #if	!defined(minor_S)
++#include <sys/sysmacros.h>
+ #define	minor_S		minor
+ #endif	/* defined(minor_S) */
+ 
+ #if	!defined(unit_S)
++#include <sys/sysmacros.h>
+ #define	unit_S(x)	0
+ #endif	/* defined(unit_S) */
+ 
+ #if	!defined(major_X)
++#include <sys/sysmacros.h>
+ #define	major_X(dp, em)	major(x2dev(dp, em))
+ #endif	/* defined(major_X) */
+ 
+ #if	!defined(minor_X)
++#include <sys/sysmacros.h>
+ #define	minor_X(dp, em)	minor(x2dev(dp, em))
+ #endif	/* defined(minor_X) */
+ 
+ #if	!defined(unit_X)
++#include <sys/sysmacros.h>
+ #define	unit_X(dp, em)	0
+ #endif	/* defined(unit_X) */
+ 
